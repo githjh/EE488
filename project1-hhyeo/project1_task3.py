@@ -84,6 +84,53 @@ fig.savefig('task3_1.png')
 plt.close(fig)
 
 #task 3-2
+row_list = []
+test_output = h_fc1.eval(feed_dict=\
+    {x: mnist.test.images, y_:mnist.test.labels})
+
+for i in range(10):
+    count = 0
+    for j in range(np.size(mnist.test.labels, 0)):
+        if mnist.test.labels[j, i] == 1:
+            #print(mnist.test.labels[j])
+            row_list.append(test_output[j])
+            count = count + 1
+
+        if count == 10:
+            break
+
+row_arr = np.array(row_list)
+
+#subtract mean
+mean_vector = np.mean(row_arr, 1)
+mean_matrix = np.tile(mean_vector, (500, 1))
+mean_matrix = np.transpose(mean_matrix)
+
+row_arr = row_arr - mean_matrix
+
+#apply SVD
+phi_output = np.matmul(np.transpose(row_arr), row_arr)
+U, s, V = np.linalg.svd(phi_output, full_matrices=True)
+z_output = np.matmul(row_arr, U)
+
+#task 3-1
+fig, ax = plt.subplots(nrows=1, ncols=1)
+ax.set_xlabel('1st column')
+ax.set_ylabel('2nd column')
+ax.set_title('Z dot graph')
+ax.plot(z_output[0:10,0], z_output[0:10,1], 'C1o')
+ax.plot(z_output[10:20,0], z_output[10:20,1], 'C2o')
+ax.plot(z_output[20:30,0], z_output[20:30,1], 'C3o')
+ax.plot(z_output[30:40,0], z_output[30:40,1], 'C4o')
+ax.plot(z_output[40:50,0], z_output[40:50,1], 'C5o')
+ax.plot(z_output[50:60,0], z_output[50:60,1], 'C6o')
+ax.plot(z_output[60:70,0], z_output[60:70,1], 'C7o')
+ax.plot(z_output[70:80,0], z_output[70:80,1], 'C8o')
+ax.plot(z_output[80:90,0], z_output[80:90,1], 'C9o')
+ax.plot(z_output[90:100,0], z_output[90:100,1], 'C0o')
+fig.savefig('task3_2.png')
+plt.close(fig)
+
 
 
 
